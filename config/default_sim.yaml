@@ -1,0 +1,40 @@
+nested_mppi_node:
+  ros__parameters:
+    dt: 0.2
+    Nt: 20
+    N_safe: 20
+    n_samples: 100
+    N_mini: 8
+    # n_mini: 100
+    n_mini: 100
+    # N_mini: 0
+    # n_mini: 0
+    num_anci: 3
+    controller_dt: 0.1
+    V_max: 1.5
+    V_min: -1.5
+    w_max: 3.1415
+    w_min: -3.1415
+    V_var: 0.5
+    w_var: 0.5
+    Seed: 3
+    temp: 0.1
+    Radius: 0.2
+    # mpc_ratio: 3
+    mpc_ratio: 1
+    R: [100.0, 0.0,
+        0.0, 1.0]
+    Q: [3.0, 0.0, 0.0,
+        0.0, 3.0, 0.0,
+        0.0, 0.0, 0.0]
+    QT: [3.0, 0.0, 0.0,
+        0.0, 3.0, 0.0,
+        0.0, 0.0, 0.0]
+    Map_Frame: "odom"
+    Odom_Frame: "odom"
+    Robot_Frame: "base_link"
+    Tolerance: 0.5
+    use_sim_time: True
+    Debug: False
+
+

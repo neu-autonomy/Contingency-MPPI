@@ -1,0 +1,11 @@
+numpy
+matplotlib
+tqdm
+jax
+casadi
+hj-reachability 
+pydecomp @ git+https://github.com/leonardjmihs/pydecomp
+# hj-reachability @ git+https://github.com/leonardjmihs/hj_reachability
+# To enable cuda, install jax seperately with "pip install -U "jax[cuda12]"
+#    sudo apt-get install libcdd-dev libblas3 libblas-dev liblapack3 liblapack-dev gfortran ccache libasio-dev 
+#    sudo apt-get install ros-humble-gazebo-ros-pkgs ros-humble-nav2

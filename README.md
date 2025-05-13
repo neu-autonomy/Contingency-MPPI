@@ -1,4 +1,4 @@
-# Contingency-MPPI: Contingency Constrained Planning with MPPI within MPPI#
+# Contingency-MPPI: Contingency Constrained Planning with MPPI within MPPI 
 
 ### **Accepted to L4DC 2025**
 
@@ -23,7 +23,11 @@ cd Contingency-MPPI
 ```
 pip3 install -r requirements.txt
 # Optionally, if you wish to run with jax-cuda (recommended), run
-# pip install -U "jax[cuda12]""
+# pip install -U "jax[cuda12]"
+```
+3. Install CMPPI
+```
+pip install -e .
 ```
 ## Setup (with ROS)
 This is the setup to run our code within a gazebo environment (and with minimal changes, on hardware). As our tests are with the Agile-X Scout-Mini, we will install the tools needed to work with the Scout-Mini, as well as the Ros2-Nav2 stack and Gazebo
@@ -39,10 +43,11 @@ git clone https://github.com/leonardjmihs/scout_ros2
 ```
 3. Install the Nav2 stack/Gazebo
 ```
-sudo apt-get install ros-humble-gazebo-ros-pkgs ros-humble-nav2
+sudo apt-get install ros-humble-gazebo-ros-pkgs ros-humble-navigation2
 ```
 4. Build
 ```
+cd ..
 colcon build
 ```
 ## Running Random Simulations

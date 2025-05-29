@@ -9,7 +9,13 @@ sudo apt-get install libcdd-dev libblas3 libblas-dev liblapack3 liblapack-dev gf
 ```
 If you also wish to run our code on hardware or Gazebo via ROS2-Humble:
 ```
-sudo apt-get install ros-humble-gazebo-ros-pkgs ros-humble-nav2
+sudo apt-get install ros-humble-gazebo-ros-pkgs ros-humble-navigation2
+```
+To use with SNOPT, request a trial license [here](https://ccom.ucsd.edu/~optimizers/licensing/). After receving the license file and libsnopt zip file, unzip the file, and
+add both to your environment variables (it may be convenient to add these lines to a ./bashrc file):
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:{path to unzipped libsnopt folder}
+export SNOPT_LICENSE={path to license file}
 ```
 
 ## Setup (No ROS)
@@ -54,11 +60,11 @@ colcon build
 To recreate the sim results in our paper, run **nmppi_global_random.py** in '**branch_mppi/jax_mppi/**'
 ```
 cd branch_mppi/jax_mppi
-python nmppi_global_random.py
+python nmppi_global_random.py --solver snopt
 ```
 This will generate a random scenario and run each variant of our algorithms as well as the baseline algorithms, and save the results in a folder titled "**sim_results\*/**""
 ## Running Gazebo Simulation
-To run a sample of our algorithm on Gazebo, first open 3 terminals, and run the following commands (don't forget to source the workspace":
+To run a sample of our algorithm on Gazebo, first open 3 terminals, and run the following commands (don't forget to source the workspace):
 1. ```ros2 launch scout_ugv_sim empty_world.launch.py```
 2. ```ros2 launch branch_mppi nav2_costmap.launch.py```
 3. ```ros2 launch branch_mppi branch_mppi_node_sim.launch.py```

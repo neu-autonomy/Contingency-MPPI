@@ -33,6 +33,7 @@ nested_mppi_node:
     Map_Frame: "map"
     Odom_Frame: "odom_dlio"
     Robot_Frame: "base_link"
+    Solver: "ipopt"
     Tolerance: 0.5
     use_sim_time: False
     Debug: False

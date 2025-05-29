@@ -222,7 +222,7 @@ def check_reachability_multiple_hjr(target_values, safe_zones, pos, scale,wh):
 
         
 
-def do_mppi_ais_mpc(params, rng_key, do_mpc=True, do_ais=True, base_alg=False, heuristic_weight=0.0):
+def do_mppi_ais_mpc(params, rng_key, do_mpc=True, do_ais=True, base_alg=False, heuristic_weight=0.0,solver="ipopt"):
     dt = params['dt']
     Nt = params['Nt']
     N_safe = params['N_safe']
@@ -314,7 +314,7 @@ def do_mppi_ais_mpc(params, rng_key, do_mpc=True, do_ais=True, base_alg=False, h
 
     dxdt, state, control = nlmodel.cas_ode()
     ode = ca.Function('ode', [state, control], [dxdt]) 
-    f = cas_shooting_solver(nlmodel, int(Nt/2),ns=ns, dt = nlmodel.dt*2, ode=ode)
+    f = cas_shooting_solver(nlmodel, int(Nt/2),ns=ns, dt = nlmodel.dt*2, ode=ode, solver=solver)
     path_list = []
     box = np.array([[1,2]])
     timestep_reached = -1
@@ -539,8 +539,9 @@ def gen_and_save_results(params, outputs, foldername, counter, alg="mpc_ais"):
     # anim.save(samples_gif_name, writer='imagemagick')
 
 
-def main():
+def main(args):
     # np.random.seed(12310) 
+    solver = args.solver if hasattr(args, 'solver') else "ipopt"
     trials=1
     rng_keys = jax.random.split(jax.random.PRNGKey(0), trials)
 
@@ -550,13 +551,13 @@ def main():
         params_copy = copy.deepcopy(params)
         
         # try:
-        outputs1= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial])
-        outputs2= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], do_ais=False)
-        outputs3= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], do_mpc=False, do_ais=False)
-        outputs4= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False)
-        outputs5= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False, heuristic_weight=3)
-        outputs6= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False, heuristic_weight=30)
-        outputs7= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=True, heuristic_weight=30)
+        outputs1= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], solver=solver)
+        outputs2= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], do_ais=False, solver=solver)
+        outputs3= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], do_mpc=False, do_ais=False, solver=solver)
+        outputs4= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False, solver=solver)
+        outputs5= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False, heuristic_weight=3, solver=solver)
+        outputs6= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=False, heuristic_weight=30, solver=solver)
+        outputs7= do_mppi_ais_mpc(copy.deepcopy(params), rng_keys[trial], base_alg=True, do_mpc=True, heuristic_weight=30, solver=solver)
         # except Exception as e:
         #     # breakpoint()
         #     pass
@@ -591,4 +592,8 @@ def main():
         plt.close('all')
 
 if __name__=="__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--solver', nargs='?', default="ipopt", help='filename')
+    args = parser.parse_args()
+    main(args)

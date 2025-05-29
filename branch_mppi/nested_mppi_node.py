@@ -92,6 +92,7 @@ class MPPINode(Node):
             ('Map_Frame', rclpy.Parameter.Type.STRING),
             ('Robot_Frame', rclpy.Parameter.Type.STRING),
             ('Odom_Frame', rclpy.Parameter.Type.STRING),
+            ('Solver', rclpy.Parameter.Type.STRING),
             ('Tolerance', rclpy.Parameter.Type.DOUBLE),
             ('Radius', rclpy.Parameter.Type.DOUBLE),
             ('Debug', rclpy.Parameter.Type.BOOL)
@@ -400,6 +401,7 @@ class MPPINode(Node):
             self.ROBOT_FRAME: str = self.get_parameter("Robot_Frame").value  # type: ignore
             self.TOLERANCE: float = self.get_parameter("Tolerance").value  # type: ignore
             self.DEBUG: bool = self.get_parameter("Debug").value  # type: ignore
+            self.solver= self.get_parameter("Solver").value
 
             self.topo_planner = TopoPRM(None, max_raw_path2=self.num_anci, 
                                         sample_sz_p=0.25, 
@@ -440,7 +442,8 @@ class MPPINode(Node):
                             int(self.Nt/self.mpc_ratio), 
                             ns=10, 
                             dt=self.nlmodel.dt*self.mpc_ratio, 
-                            ode=ode)
+                            ode=ode,
+                            solver=self.solver)
             self.ilqr = iLQRSolver(self.nlmodel, self.nlmodel.dt, 
                                jnp.array([[3.0, 0.0, 0.0],
                                           [0.0, 3.0, 0.0],
